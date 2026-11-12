@@ -324,7 +324,7 @@ end
 -- Settings window
 ---------------------------------------------------------------------------
 local sw = CreateFrame("Frame", "ForeverSpeedSettings", UIParent, "BasicFrameTemplateWithInset")
-sw:SetSize(300, 495)
+sw:SetSize(300, 505)
 sw:SetPoint("CENTER")
 sw:SetFrameStrata("DIALOG")
 sw:SetClampedToScreen(true)
@@ -388,12 +388,30 @@ Check("Show minimap button", function() return not db.minimap.hide end,
 Cycler("Display units", function() return UNIT_NAMES[db.units] end, function() db.units = NEXT_UNITS[db.units] or "pct" end)
 Cycler("Speed mode", function() return db.mode == "max" and "Max run speed" or "Current speed" end,
 	function() db.mode = (db.mode == "current") and "max" or "current" end)
-Cycler("Display scale", function() return ("%.1fx"):format(db.scale) end, function()
-	db.scale = db.scale + 0.1
-	if db.scale > 2.05 then db.scale = 0.6 end
-	db.scale = math.floor(db.scale * 10 + 0.5) / 10
-	frame:SetScale(db.scale)
-end)
+do -- Display scale slider (0.5x - 3.0x)
+	local l = sw:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	l:SetPoint("TOPLEFT", 22, y - 4)
+	local s = CreateFrame("Slider", "ForeverSpeedScaleSlider", sw, "UISliderTemplateWithLabels")
+	s:SetSize(130, 17)
+	s:SetPoint("TOPRIGHT", -18, y - 2)
+	s:SetMinMaxValues(0.5, 3)
+	s:SetValueStep(0.05)
+	if s.SetObeyStepOnDrag then s:SetObeyStepOnDrag(true) end
+	if s.Low then s.Low:SetText("0.5") end
+	if s.High then s.High:SetText("3") end
+	if s.Text then s.Text:SetText("") end
+	local function Label(v) l:SetText(("Display scale: |cffffd100%.2fx|r"):format(v)) end
+	s:SetScript("OnValueChanged", function(_, v)
+		v = math.floor(v * 20 + 0.5) / 20
+		Label(v)
+		if db and db.scale ~= v then
+			db.scale = v
+			frame:SetScale(v)
+		end
+	end)
+	refreshers[#refreshers + 1] = function() s:SetValue(db.scale); Label(db.scale) end
+	y = y - 36
+end
 
 -- Titan / LDB
 Header("Titan Panel bar")
