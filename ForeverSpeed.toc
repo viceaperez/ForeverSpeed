@@ -2,9 +2,19 @@
 ## Title: ForeverSpeed
 ## Notes: Speedometer: your speed, your target's speed and the difference. Floating display, minimap button, settings window, Titan Panel / LDB plugin. /fspeed
 ## Author: Vichaoss
-## Version: 1.1.1
+## Version: 1.2.0
 ## SavedVariables: ForeverSpeedDB
 ## OptionalDeps: Titan
 ## IconTexture: Interface\Icons\Ability_Rogue_Sprint
 
-ForeverSpeed.lua
+Core.lua
+Format.lua
+Speed.lua
+Tooltip.lua
+Views\Display.lua
+Views\Broker.lua
+Views\Minimap.lua
+Settings\Widgets.lua
+Settings\Options.lua
+Settings\Window.lua
+Commands.lua
