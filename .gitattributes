@@ -1,0 +1,5 @@
+# keep development files out of release zips (git archive)
+tests/ export-ignore
+docs/ export-ignore
+.gitignore export-ignore
+.gitattributes export-ignore
